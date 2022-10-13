@@ -1,22 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <!-- <li>Filter for a city</li>
+        <li>or a state</li> -->
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const cities = [];
 
-</script>
-</body>
+      fetch(endpoint)
+        .then((response) => response.json())
+        .then((data) => cities.push(...data));
+
+      function getCitiesByName(cityName) {
+        return cities
+          .map((city) => ({
+            name: city.city.toLowerCase(),
+            state: city.state.toLowerCase(),
+            population: Number(city.population),
+          }))
+          .filter(
+            ({ name, state }) =>
+              name.includes(cityName) || state.includes(cityName)
+          );
+      }
+
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+        });
+
+      function highlight(term, searchTerm) {
+        const regex = new RegExp(searchTerm, "g");
+        return term.replace(
+          regex,
+          (match) => `<span class="hl">${match}</span>`
+        );
+      }
+
+      function displayCities(event) {
+        suggestions.innerHTML = "";
+        const searchTerm = this.value.toLowerCase();
+
+        if (searchTerm) {
+          const citiesMatch = getCitiesByName(searchTerm);
+
+          citiesMatch.forEach(function (city) {
+            const cityHighlighted = highlight(city.name, searchTerm);
+            const stateHighlighted = highlight(city.state, searchTerm);
+            const listItem = document.createElement("li");
+
+            listItem.innerHTML = `
+              <span>${cityHighlighted}, ${stateHighlighted}</span>
+              <span>${city.population.toLocaleString("en-US")}</span>
+            `;
+
+            suggestions.appendChild(listItem);
+          });
+        }
+      }
+
+      const input = document.querySelector(".search");
+      const suggestions = document.querySelector(".suggestions");
+
+      input.addEventListener("change", displayCities);
+      input.addEventListener("keyup", displayCities);
+    </script>
+  </body>
 </html>
