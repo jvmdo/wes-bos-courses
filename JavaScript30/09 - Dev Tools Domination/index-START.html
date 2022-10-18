@@ -1,46 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Console Tricks!</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+  </head>
+  <body>
+    <p onClick="makeGreen()">×BREAK×DOWN×</p>
 
-  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+    <script>
+      function makeGreen() {
+        const p = document.querySelector("p");
+        p.style.color = "#BADA55";
+        p.style.fontSize = "50px";
+      }
 
-  <script>
-    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+      // Tip #01: Find JS code that runs on element
+      /* 
+        Open Dev Tools, go to Elements tab, find the target element, 
+        right click on it > Break in > attribute modification.
 
-    function makeGreen() {
-      const p = document.querySelector('p');
-      p.style.color = '#BADA55';
-      p.style.fontSize = '50px';
-    }
+        Follow this process then click on the paragraph on the page.
+        The dev tools displays the exactly line where the JS code makes
+        the paragraph change to big green.
+      */
 
-    // Regular
+      // Tip #02: Variables interpolation within console.log() method
+      const orb1 = "Earth";
+      const orb2 = "Moon";
+      const dist = Number("384400").toLocaleString("en-US");
+      console.log("The distance from %s to %s is %s km", orb1, orb2, dist);
 
-    // Interpolated
+      // Tip #03: Apply styles to console.log() method
+      console.log(
+        "%c That's a huge green message.",
+        "color: lightgreen; font-size: 40px; font-weight: bold; text-align: end"
+      );
 
-    // Styled
+      // Tip #04: console.warning() method
+      console.warn("This is a warning message.");
 
-    // warning!
+      // Tip #05: console.error() method
+      console.error("This is an error message!");
 
-    // Error :|
+      // Tip #06: console.info() method
+      console.info("%c This is an info message", "color: deepskyblue");
 
-    // Info
+      // Tip #07: console.assert() method
+      /* 
+        Logs an error message (2nd parameter) if the condition (1st parameter) is false
+      */
+      const distFromEarthToVenus = 38_000_000;
+      const distFromEarthToMars = 54_600_000;
+      const condition = distFromEarthToMars < distFromEarthToVenus;
+      console.assert(condition, "This cannot be true!");
 
-    // Testing
+      // Tip #08: console.clear() method
+      console.clear();
 
-    // clearing
+      // Tip #09: console.dir() method
+      /* 
+        Logs the entire element as an object it is, deviate from .log()
+        that just logs the element itself.
+      */
+      const breakDown = document.querySelector("p");
+      console.dir(breakDown);
 
-    // Viewing DOM Elements
+      // Tip #10: console.group() + console.groupEnd() methods
+      /* 
+        Group logs together
+      */
+      console.groupCollapsed("Types of logging");
+      console.log(".log()");
+      console.info(".info()");
+      console.warn(".warn()");
+      console.error(".error()");
+      console.assert(1 === "1", ".assert()");
+      console.groupEnd("Types of logging");
 
-    // Grouping together
+      // Tip #11: console.count() method
+      /* 
+        Counts how many times the value passed to this function ocurred
+      */
+      console.count("The shortest path between two dots is a line");
+      console.count("The shortest path between two dots is a line");
+      console.count("The shortest path between two dots is a line");
+      console.count("The shortest path between two dots is a line");
 
-    // counting
+      // Tip #12: console.time() + console.timeEnd() methods
+      /* 
+        Logs how much time certain operation consumed until it's been completed
+      */
+      console.time();
+      fetch("https://api.github.com/users/jvmdo")
+        .then((response) => response.json())
+        .then((user) => {
+          console.log(user);
+          console.timeEnd();
+        });
 
-    // timing
-
-  </script>
-</body>
+      // Tip #13: console.table() method
+      /* 
+        Logs an array of objects as a table
+      */
+      const dogs = [
+        { name: "Snickers", age: 2, breed: "Shepherd" },
+        { name: "hugo", age: 8 },
+        { name: "who let", age: 3 },
+        { name: "the dogs", age: 5 },
+        { name: "out", age: 7, gender: "male" },
+      ];
+      console.table(dogs);
+    </script>
+  </body>
 </html>
