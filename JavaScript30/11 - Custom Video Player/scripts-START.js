@@ -68,8 +68,8 @@ forward.addEventListener("click", backOrForth);
 backward.addEventListener("click", backOrForth);
 
 // Volume/speed up/down;
-volume.addEventListener("mousemove", slideUpOrDown);
-speed.addEventListener("mousemove", slideUpOrDown);
+volume.addEventListener("input", slideUpOrDown);
+speed.addEventListener("input", slideUpOrDown);
 
 // Auto increase/decrease the progress bar
 video.addEventListener("timeupdate", autoChangeProgress);
