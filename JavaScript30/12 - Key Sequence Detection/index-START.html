@@ -14,10 +14,8 @@
       let keys = [];
 
       window.addEventListener("keyup", (event) => {
-        const longest = Math.max(keys.length, secretCode.length);
-
         keys.push(event.key);
-        keys = keys.slice(-longest);
+        keys = keys.slice(-secretCode.length);
 
         const keySequence = keys.join("");
 
