@@ -1,56 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS Reference VS Copy</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Primitive types are assigned by copy
+       * the value from one to the other one.
+       *
+       * This way, changing one of them does not
+       * affect the other one.
+       */
+      let a = 33;
+      let b = a;
+      a = 0;
+      b += 12;
+      // console.log("b ==", b); // 45
+      // console.log("a ==", a); // 0
 
-  <script>
-    // start with strings, numbers and booleans
+      /**
+       * Non-primitive types like Array and Objects
+       * are assigned by reference, which means 2 or
+       * more variables point to the same value.
+       *
+       * This way, changing one of them DOES affect
+       * the others that own the same reference.
+       */
+      const players = ["Wes", "Sarah", "Ryan", "Poppy"];
+      const girlPlayers = players;
+      // girlPlayers.splice(0, 1);
+      // girlPlayers.splice(1, 1);
+      // console.log("girls", girlPlayers); // ['Sarah', 'Poppy']
+      // console.log("everyone", players); // ['Sarah', 'Poppy']
+      // players.push('Wesley');
+      // console.log("girls", girlPlayers); // ['Sarah', 'Poppy', 'Wesley']
+      // console.log("everyone", players); // ['Sarah', 'Poppy', 'Wesley']
 
-    // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+      /**
+       * In order to assign arrays by value,
+       * make a copy of it instead.
+       *
+       * Array.from();
+       * arr.slice();
+       * [].concat();
+       * [...arr]
+       */
+      const girlslyPlayers = Array.from(players);
+      // girlslyPlayers.splice(0, 1);
+      // girlslyPlayers.splice(1, 1);
+      // console.log("girls", girlslyPlayers); // ['Sarah', 'Poppy']
+      // console.log("everyone", players); // ['Wes', 'Sarah', 'Ryan', 'Poppy']
 
-    // and we want to make a copy of it.
+      /**
+       * Bare in mind, however, those methods actually
+       * returns a shallow copy of an array.
+       * Due to this, changing the values in [arr2]
+       * of its chained arrays below also change
+       * the values in [arr1].
+       *
+       * See that the first level [] has no side effects.
+       *
+       * Avoid this behavior applying the so called deep clone.
+       * https://dev.to/samanthaming/how-to-deep-clone-an-array-in-javascript-3cig
+       */
+      const arr1 = [1, 2, [3, 4], 5, [6, 7, [8, 9]]];
+      // const arr2 = Array.from(arr1);
+      // const arr2 = arr1.slice()
+      // const arr2 = [...arr1]
+      const arr2 = [].concat(arr1);
+      // arr2[0] = "99";
+      // arr2[2][1] = "99";
+      // arr2[4][2][0] = "99";
+      // console.log("arr2", arr2);
+      // console.log("arr1", arr1)
 
-    // You might think we can just do something like this:
+      /**
+       * The same thing goes for objects
+       */
+      const person = { name: "Wes Bos", age: 80 };
+      // const wes = person;
+      // wes.name = "Wesley";
+      // console.log(wes); // {name: 'Wesley', age: 80}
+      // console.log(person); // {name: 'Wesley', age: 80}
 
-    // however what happens when we update that array?
+      /**
+       * Shallow copy
+       * Object.assign({}, source)
+       * {...source}
+       */
+      // const wes = Object.assign({}, person);
+      const wes = { ...person };
+      wes.name = "Wesley";
+      console.log(wes); // {name: 'Wesley', age: 80}
+      console.log(person); // {name: 'Wes Bos', age: 80}
 
-    // now here is the problem!
+      /**
+       * The poor man's deep clone
+       */
+      const comp = {
+        status: "OK",
+        data: [
+          {
+            id: 1,
+            name: "Little-Bergnaum",
+            email: "gardner18@yahoo.com",
+            addresses: [
+              {
+                id: 0,
+                street: "111 Satterfield Garden Suite 688",
+                streetName: "Burnice Common",
+              },
+              {
+                id: 1,
+                street: "2300 Boyle Courts Suite 617",
+                streetName: "Swift Track",
+              },
+            ],
+          },
+        ],
+      };
 
-    // oh no - we have edited the original array too!
+      const compClone = JSON.parse(JSON.stringify(comp));
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+      comp.data[0].addresses[1].street = "21th Jump";
+      compClone.data[0].addresses[1].streetName = "What's the difference";
 
-    // So, how do we fix this? We take a copy instead!
-
-    // one way
-
-    // or create a new array and concat the old one in
-
-    // or use the new ES6 Spread
-
-    // now when we update it, the original one isn't changed
-
-    // The same thing goes for objects, let's say we have a person object
-
-    // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
-
-    // and think we make a copy:
-
-    // how do we take a copy instead?
-
-    // We will hopefully soon see the object ...spread
-
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
-
-  </script>
-
-</body>
+      console.log(comp);
+      console.log(compClone);
+    </script>
+  </body>
 </html>
