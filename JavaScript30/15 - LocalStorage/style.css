@@ -17,7 +17,7 @@ html {
 }
 
 svg {
-  fill: white;
+  fill: snow;
   background: rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 50%;
@@ -74,7 +74,7 @@ h2 {
   margin-top: 20px;
 }
 
-.add-items input {
+.add-items :is(input, button) {
   padding: 10px;
   outline: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
