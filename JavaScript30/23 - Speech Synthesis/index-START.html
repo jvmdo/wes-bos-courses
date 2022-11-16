@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Speech Synthesis</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>Speech Synthesis</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="voiceinator">
-
       <h1>The Voiceinator 5000</h1>
 
       <select name="voice" id="voices">
@@ -17,25 +19,72 @@
       </select>
 
       <label for="rate">Rate:</label>
-      <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+      <input name="rate" type="range" min="0" max="3" value="1" step="0.1" />
 
       <label for="pitch">Pitch:</label>
+      <input name="pitch" type="range" min="0" max="2" step="0.1" />
 
-      <input name="pitch" type="range" min="0" max="2" step="0.1">
-      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+      <textarea name="text">
+Is it possible to continue reading from where the narrator is when the voice or options change?</textarea
+      >
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
-
     </div>
 
-<script>
-  const msg = new SpeechSynthesisUtterance();
-  let voices = [];
-  const voicesDropdown = document.querySelector('[name="voice"]');
-  const options = document.querySelectorAll('[type="range"], [name="text"]');
-  const speakButton = document.querySelector('#speak');
-  const stopButton = document.querySelector('#stop');
-</script>
+    <script>
+      const voicesDropdown = document.querySelector('[name="voice"]');
+      const options = document.querySelectorAll('[type="range"]');
+      const text = document.querySelector('[name="text"]');
+      const speakButton = document.querySelector("#speak");
+      const stopButton = document.querySelector("#stop");
 
-</body>
+      let voices = [];
+      const utterance = new SpeechSynthesisUtterance();
+      utterance.text = text.value;
+
+      function replay() {
+        if (speechSynthesis.speaking) {
+          speechSynthesis.cancel();
+        }
+        speechSynthesis.speak(utterance);
+      }
+
+      speechSynthesis.addEventListener("voiceschanged", function (event) {
+        voices = speechSynthesis.getVoices();
+
+        voicesDropdown.innerHTML += voices.map(
+          ({ name, lang }) =>
+            `<option value="${name}">${name} (${lang})</option>`
+        );
+      });
+
+      voicesDropdown.addEventListener("change", function () {
+        utterance.voice = voices.find((voice) => voice.name === this.value);
+        replay();
+      });
+
+      options.forEach((option) => {
+        option.addEventListener("input", function () {
+          utterance[this.name] = this.value;
+          replay();
+        });
+      });
+
+      text.addEventListener("change", function () {
+        utterance.text = this.value;
+      });
+
+      speakButton.addEventListener("click", function () {
+        if (speechSynthesis.paused) {
+          speechSynthesis.resume();
+        } else {
+          speechSynthesis.speak(utterance);
+        }
+      });
+
+      stopButton.addEventListener("click", function () {
+        speechSynthesis.pause();
+      });
+    </script>
+  </body>
 </html>
