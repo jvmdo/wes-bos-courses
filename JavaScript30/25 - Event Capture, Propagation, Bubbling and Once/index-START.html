@@ -1,48 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Understanding JavaScript's Capture</title>
-</head>
-<body class="bod">
-
-  <div class="one">
-    <div class="two">
-      <div class="three">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two">
+        <div class="three"></div>
       </div>
     </div>
-  </div>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
+    <style>
+      body {
+        min-height: 100vh;
+      }
 
-  div {
-    width: 100%;
-    padding: 100px;
-  }
+      body,
+      div {
+        display: grid;
+        margin: auto;
+      }
 
-  .one {
-    background: thistle;
-  }
+      div {
+        height: 70%;
+        aspect-ratio: 1 / 1;
+      }
 
-  .two {
-    background: mistyrose;
-  }
+      .one {
+        background: thistle;
+      }
 
-  .three {
-    background: coral;
-  }
-</style>
+      .two {
+        background: mistyrose;
+      }
 
-<button></button>
-<script>
+      .three {
+        background: lightblue;
+      }
+    </style>
 
-</script>
-</body>
+    <script>
+      const body = document.querySelector("body");
+
+      body.addEventListener("click", function (event) {
+        //? The entire body tree
+        // console.log(this);
+        //? The box that is actually clicked
+        // console.log("Target:", event.target.className);
+        //? The whole path from bottom up
+        /* console.log(
+          Array.from(event.path).map(
+            (e) => e.className || e.nodeName || e.name || "Window"
+          )
+        ); */
+      });
+
+      const boxes = document.querySelectorAll("div");
+
+      boxes.forEach((box) => {
+        box.addEventListener(
+          "click",
+          function (event) {
+            //? The entire boxes tree
+            /* console.log(this); */
+            //? The boxes' class name
+            console.log(this.className);
+            //? The box that is actually clicked
+            /* console.log("Target:", event.target.className); */
+            //? The whole path from bottom up
+            /* console.log(
+              Array.from(event.path).map(
+                (e) => e.className || e.nodeName || e.name || "Window"
+              )
+            ); */
+            // If capture is false
+            // Stop the traversal right on the target box
+            // Else
+            // Stop on the topmost box
+            event.stopPropagation();
+          },
+          {
+            // If true, the events are fired from up to bottom
+            // instead of the default bottom up
+            capture: false,
+            // Fire the event once, then the listener
+            // is detached
+            once: true,
+          }
+        );
+      });
+    </script>
+  </body>
 </html>
