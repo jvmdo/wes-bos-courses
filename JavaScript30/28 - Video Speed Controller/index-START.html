@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Video Speed Scrubber</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <div class="wrapper">
-    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
-    <div class="speed">
-      <div class="speed-bar">1×</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Speed Scrubber</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <video
+        class="flex"
+        width="575"
+        height="323"
+        src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
+        loop
+        controls
+      ></video>
+      <div class="speed">
+        <div class="speed-bar">1×</div>
+      </div>
     </div>
-  </div>
 
-<script>
-</script>
-</body>
+    <script>
+      const video = document.querySelector("video");
+      const bar = document.querySelector(".speed");
+      const scrubber = document.querySelector(".speed-bar");
+
+      function scale(value, min, max) {
+        return value * (max - min) + min;
+      }
+
+      function normalize(value, max) {
+        return (value * 100) / max;
+      }
+
+      bar.addEventListener("mousemove", function (event) {
+        const walk = this.offsetHeight - (event.y - this.offsetTop + 1);
+        const percentage = walk / this.offsetHeight;
+        const rate = scale(percentage, 0.25, 5);
+        const height = normalize(rate, 5);
+
+        scrubber.style.height = `${height}%`;
+        scrubber.textContent = `${rate.toFixed(1)}x`;
+        video.playbackRate = rate;
+        // console.log(percentage);
+      });
+    </script>
+  </body>
 </html>

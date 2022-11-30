@@ -1,38 +1,56 @@
 body {
-  margin: 0;
+  font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #4C4C4C url('https://unsplash.it/1500/900?image=1021');
-  background-size: cover;
-  font-family: sans-serif;
+  margin: 0;
+  background: linear-gradient(
+      45deg,
+      hsla(340, 100%, 55%, 1) 0%,
+      hsla(340, 100%, 55%, 0) 70%
+    ),
+    linear-gradient(
+      135deg,
+      hsla(225, 95%, 50%, 1) 10%,
+      hsla(225, 95%, 50%, 0) 80%
+    ),
+    linear-gradient(
+      225deg,
+      hsla(140, 90%, 50%, 1) 10%,
+      hsla(140, 90%, 50%, 0) 80%
+    ),
+    linear-gradient(
+      315deg,
+      hsla(35, 95%, 55%, 1) 100%,
+      hsla(35, 95%, 55%, 0) 70%
+    );
 }
 
 .wrapper {
-  width: 850px;
+  width: 625px;
   display: flex;
 }
 
 video {
-  box-shadow: 0 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .speed {
   background: #efefef;
   flex: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   margin: 10px;
   border-radius: 50px;
-  box-shadow: 0 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
 .speed-bar {
   width: 100%;
   background: linear-gradient(-170deg, #2376ae 0%, #c16ecf 100%);
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
